@@ -9,7 +9,13 @@ import (
 
 type KafkaConfig struct{}
 
-func (c KafkaConfig) Connect(topic string, ctx context.Context) {
+type Received struct {
+	Message string
+	Offset  int64
+}
+
+func (c KafkaConfig) Connect(topic string, ctx context.Context, msgChan chan Received) {
+	defer close(msgChan)
 	reader := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:  []string{"localhost:9092"},
 		Topic:    topic,
@@ -28,10 +34,13 @@ func (c KafkaConfig) Connect(topic string, ctx context.Context) {
 			fmt.Println("Error reading message ", err)
 			break
 		}
-		fmt.Printf("message at offset %d: %s = %s\n",
-			message.Offset, string(message.Key), string(message.Value))
-	}
 
+		fmt.Println(string(message.Value))
+		msgChan <- Received{
+			Message: string(message.Value),
+			Offset:  message.Offset,
+		}
+	}
 	if err := reader.Close(); err != nil {
 		log.Fatal("failed to close reader:", err)
 	}
