@@ -1,12 +1,11 @@
 package main
 
-import "github.com/raymondgitonga/consumer-service/internal"
+import (
+	"context"
+	"github.com/raymondgitonga/consumer-service/internal"
+)
 
 func main() {
-
-	for {
-		consumer := internal.Consume{}
-		consumer.ReadMultiplicationMessage()
-	}
-
+	consumer := internal.Consume{}
+	consumer.ReadMultiplicationMessage(context.Background())
 }

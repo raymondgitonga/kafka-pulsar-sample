@@ -15,7 +15,7 @@ type Producer interface {
 
 func (p Produce) SendMultiplicationMessage() {
 	kafkaConfig := config.KafkaConfig{}
-	calc, err := repositiory.NewVariables(float64(4), float64(6))
+	calc, err := repositiory.NewVariables(float64(9), float64(6))
 
 	if err != nil {
 		log.Fatalf("Couldn't set new variables %s", err)
