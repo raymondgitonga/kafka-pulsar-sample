@@ -16,6 +16,15 @@ func (c KafkaConfig) Connect(topic string, message string, ctx context.Context) 
 		AllowAutoTopicCreation: true,
 	}
 
+	defer func() {
+		err := writer.Close()
+		if err != nil {
+			fmt.Println("Error closing producer: ", err)
+			return
+		}
+		fmt.Println("Producer closed")
+	}()
+
 	err := writer.WriteMessages(
 		ctx,
 		kafka.Message{
@@ -24,11 +33,7 @@ func (c KafkaConfig) Connect(topic string, message string, ctx context.Context) 
 		},
 	)
 
-	if err == context.Canceled {
-		closeErr := writer.Close()
-		if closeErr != nil {
-			fmt.Printf("Failed to close writer: %s", closeErr)
-		}
+	if err != nil {
 		return errors.New("Context cancelled called: " + err.Error())
 	}
 
