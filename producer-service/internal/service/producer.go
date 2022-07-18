@@ -6,9 +6,11 @@ import (
 	"github.com/raymondgitonga/producer-service/config"
 	"github.com/raymondgitonga/producer-service/internal/repositiory"
 	"log"
+	"math/rand"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 type Produce struct{}
@@ -31,18 +33,27 @@ func (p Produce) SendMultiplicationMessage() {
 		cancel()
 	}()
 
-	calc, err := repositiory.NewVariables(float64(9), float64(6))
+	calc, err := repositiory.NewVariables(generateRandomNumber(), generateRandomNumber())
 
 	if err != nil {
-		log.Fatalf("Couldn't set new variables %s", err)
+		log.Printf("Couldn't set new variables %s", err)
+		return
 	}
 
-	result := fmt.Sprintf("%f", calc.Multiply())
+	result := fmt.Sprintf("%d", calc.Multiply())
 
-	err = kafkaConfig.Connect("multiply", result, ctx)
+	err = kafkaConfig.Connect("times", result, ctx)
 
 	if err != nil {
 		log.Fatalf("Error sending message %s", err)
 	}
+}
 
+func generateRandomNumber() int {
+	rand.Seed(time.Now().UnixNano())
+	min := 1
+	max := 50
+
+	randomNum := rand.Intn(max-min+1) + min
+	return randomNum
 }

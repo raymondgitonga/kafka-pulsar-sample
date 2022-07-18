@@ -2,7 +2,6 @@ package config
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/segmentio/kafka-go"
 )
@@ -22,7 +21,6 @@ func (c KafkaConfig) Connect(topic string, message string, ctx context.Context) 
 			fmt.Println("Error closing producer: ", err)
 			return
 		}
-		fmt.Println("Producer closed")
 	}()
 
 	err := writer.WriteMessages(
@@ -34,8 +32,9 @@ func (c KafkaConfig) Connect(topic string, message string, ctx context.Context) 
 	)
 
 	if err != nil {
-		return errors.New("Context cancelled called: " + err.Error())
+		return err
 	}
+	fmt.Println(message)
 
 	return err
 }

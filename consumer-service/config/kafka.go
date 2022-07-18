@@ -31,7 +31,7 @@ func (c KafkaConfig) Connect(topic string, ctx context.Context, msgChan chan Rec
 			fmt.Println("Error closing consumer: ", err)
 			return
 		}
-		fmt.Println("Producer closed")
+		fmt.Println("Consumer closed")
 	}()
 
 	if err != nil {

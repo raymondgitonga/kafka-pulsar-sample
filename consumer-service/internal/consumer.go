@@ -29,7 +29,7 @@ func (c *Consume) ReadMultiplicationMessage(ctx context.Context) {
 		cancel()
 	}()
 
-	go kafkaConfig.Connect("multiply", ctx, msgChan)
+	go kafkaConfig.Connect("times", ctx, msgChan)
 
 	for val := range msgChan {
 		fmt.Println(val.Message)

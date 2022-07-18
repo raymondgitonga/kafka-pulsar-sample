@@ -3,16 +3,16 @@ package repositiory
 import "errors"
 
 type Variables struct {
-	a float64
-	b float64
+	a int
+	b int
 }
 
 type Calculator interface {
-	Multiply() float64
-	Addition() float64
+	Multiply() int
+	Addition() int
 }
 
-func NewVariables(a float64, b float64) (Calculator, error) {
+func NewVariables(a int, b int) (Calculator, error) {
 	if a < 1 || b < 1 {
 		return &Variables{}, errors.New("variables should be larger than zero")
 	}
@@ -22,10 +22,10 @@ func NewVariables(a float64, b float64) (Calculator, error) {
 	}, nil
 }
 
-func (v *Variables) Multiply() float64 {
+func (v *Variables) Multiply() int {
 	return v.a * v.b
 }
 
-func (v *Variables) Addition() float64 {
+func (v *Variables) Addition() int {
 	return v.a + v.b
 }
